@@ -24,7 +24,7 @@ export class Snake implements Drawable, HasCollision {
 
   private paused: boolean = false;
   private distanceFactor: number;
-  private timeFactor: number = 100;
+  private timeFactor: number = 5.5;
   private vector: SnakeVector;
   private body: BodySegment[] = [[0, 0]];
   private bodyLength = 3;
@@ -145,8 +145,7 @@ export class Snake implements Drawable, HasCollision {
 
   eat() {
     this.bodyLength += 1;
-    const adjustedTimeFactor = this.timeFactor - 5;
-    this.timeFactor = adjustedTimeFactor <= 0 ? 0 : adjustedTimeFactor;
+    this.timeFactor -= 0.125;
   }
 
   move() {
@@ -184,6 +183,18 @@ export class Snake implements Drawable, HasCollision {
     return this.deadSnake;
   }
 
+  delayCheck(timestamp?: number): boolean {
+    if (
+      timestamp &&
+      this.timestamp &&
+      timestamp < this.timestamp + Math.exp(this.timeFactor)
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
   draw(timestamp?: number, paused?: boolean) {
     const ctx = this.getCtx();
 
@@ -194,12 +205,7 @@ export class Snake implements Drawable, HasCollision {
       return;
     }
 
-    const delayCheck =
-      timestamp &&
-      this.timestamp &&
-      timestamp < this.timestamp + this.timeFactor;
-
-    if (!delayCheck) {
+    if (!this.delayCheck(timestamp)) {
       const removedSegment = this.move();
       if (removedSegment) {
         const [removedX, removedY] = removedSegment;

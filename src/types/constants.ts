@@ -10,4 +10,5 @@ export enum EventTypes {
   KEYUP = "keyup",
   KEYDOWN = "keydown",
   MOUSEMOVE = "mousemove",
+  MOUSEDOWN = "mousedown",
 }

@@ -7,9 +7,11 @@ import { EventTypes, KeyCode } from "./types/constants";
 export class GameController {
   private board: HTMLDivElement | null;
 
-  private readonly gameWidth = 600;
-  private readonly gameHeight = 1200;
   private readonly gridSize = 40;
+  private readonly gridWidth = 30;
+  private readonly gridHeight = 15;
+  private gameWidth: number;
+  private gameHeight: number;
 
   private snake: Snake | null = null;
   private snakeCanvas: HTMLCanvasElement | null = null;
@@ -21,11 +23,13 @@ export class GameController {
   private uiCanvas: HTMLCanvasElement | null = null;
 
   private rafId: number = 0;
-  private paused: boolean = false;
+  private paused: boolean = true;
   private gameCount: number = 1;
 
   private constructor() {
     this.board = document.querySelector("div#board");
+    this.gameWidth = this.gridSize * this.gridWidth;
+    this.gameHeight = this.gridSize * this.gridHeight;
     this.setUp();
   }
 
